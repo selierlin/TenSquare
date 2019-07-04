@@ -1,0 +1,214 @@
+swagger: "2.0"
+info:
+  description: Gathering
+  version: "1.0.0"
+  title: API-Gathering
+host: api.tensquare.com
+basePath: /gathering
+paths:
+  /gathering:
+    post:
+      summary: 增加Gathering
+      parameters:
+      - in: body
+        name: body
+        description: Gathering实体
+        required: true
+        schema:
+          $ref: "#/definitions/Gathering"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Gathering全部列表
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiGatheringListResponse'
+  /gathering/{gatheringId}:
+    get:
+      summary: 根据ID查询gathering
+      parameters:
+        - name: gatheringId
+          in: path
+          description: GatheringID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiGatheringResponse'
+    put:
+      summary: 修改Gathering
+      parameters:
+        - name: gatheringId
+          in: path
+          description: GatheringID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Gathering实体
+          required: true
+          schema:
+            $ref: "#/definitions/Gathering"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Gathering
+      parameters:
+        - name: gatheringId
+          in: path
+          description: GatheringID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /gathering/search:
+    post:
+      summary: 根据条件查询Gathering列表
+      parameters:
+        - name: body
+          in: body
+          description: Gathering实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Gathering'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiGatheringListResponse'
+  /gathering/search/{page}/{size}:
+    post:
+      summary: Gathering分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Gathering"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiGatheringPageResponse'
+definitions:
+  Gathering:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "编号"
+      name:
+        type: "string"
+        description: "活动名称"
+      summary:
+        type: "string"
+        description: "大会简介"
+      detail:
+        type: "string"
+        description: "详细说明"
+      sponsor:
+        type: "string"
+        description: "主办方"
+      image:
+        type: "string"
+        description: "活动图片"
+      starttime:
+        type: "string"
+        description: "开始时间"
+      endtime:
+        type: "string"
+        description: "截止时间"
+      address:
+        type: "string"
+        description: "举办地点"
+      enrolltime:
+        type: "string"
+        description: "报名截止"
+      state:
+        type: "string"
+        description: "是否可见"
+      city:
+        type: "string"
+        description: "城市"
+
+  GatheringList:
+    type: "array"
+    items:
+      $ref: '#/definitions/Gathering'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiGatheringResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Gathering'
+  ApiGatheringListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/GatheringList'
+  ApiGatheringPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/GatheringList'

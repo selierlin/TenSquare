@@ -1,0 +1,199 @@
+swagger: "2.0"
+info:
+  description: Reply
+  version: "1.0.0"
+  title: API-Reply
+host: api.tensquare.com
+basePath: /tensquare_qa
+paths:
+  /reply:
+    post:
+      summary: 增加Reply
+      parameters:
+      - in: body
+        name: body
+        description: Reply实体
+        required: true
+        schema:
+          $ref: "#/definitions/Reply"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Reply全部列表
+      responses:
+        200:
+          description: 成功
+          schema: 
+            $ref: '#/definitions/ApiReplyListResponse'
+  /reply/{replyId}:
+    get:
+      summary: 根据ID查询reply
+      parameters:
+        - name: replyId
+          in: path
+          description: ReplyID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiReplyResponse'
+    put:
+      summary: 修改Reply
+      parameters:
+        - name: replyId
+          in: path
+          description: ReplyID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Reply实体
+          required: true
+          schema:
+            $ref: "#/definitions/Reply"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Reply
+      parameters:
+        - name: replyId
+          in: path
+          description: ReplyID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /reply/search:
+    post:
+      summary: 根据条件查询Reply列表 
+      parameters:
+        - name: body
+          in: body
+          description: Reply实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Reply'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiReplyListResponse'
+  /reply/search/{page}/{size}:
+    post:
+      summary: Reply分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Reply"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiReplyPageResponse'
+definitions:
+  Reply:
+    type: "object"
+    properties:
+      id:
+        type: "string"        
+        description: "编号"
+      problemid:
+        type: "string"        
+        description: "问题ID"
+      content:
+        type: "string"        
+        description: "回答内容"
+      createtime:
+        type: "string"        
+        description: "创建日期"
+      updatetime:
+        type: "string"        
+        description: "更新日期"
+      userid:
+        type: "string"        
+        description: "回答人ID"
+      nickname:
+        type: "string"        
+        description: "回答人昵称"
+
+  ReplyList:
+    type: "array"
+    items: 
+      $ref: '#/definitions/Reply'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiReplyResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Reply'
+  ApiReplyListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/ReplyList'
+  ApiReplyPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/ReplyList'

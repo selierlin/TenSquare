@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  description: Admin
+  version: "1.0.0"
+  title: API-Admin
+host: api.tensquare.com
+basePath: /tensquare_user
+paths:
+  /admin:
+    post:
+      summary: 增加Admin
+      parameters:
+      - in: body
+        name: body
+        description: Admin实体
+        required: true
+        schema:
+          $ref: "#/definitions/Admin"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Admin全部列表
+      responses:
+        200:
+          description: 成功
+          schema: 
+            $ref: '#/definitions/ApiAdminListResponse'
+  /admin/{adminId}:
+    get:
+      summary: 根据ID查询admin
+      parameters:
+        - name: adminId
+          in: path
+          description: AdminID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiAdminResponse'
+    put:
+      summary: 修改Admin
+      parameters:
+        - name: adminId
+          in: path
+          description: AdminID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Admin实体
+          required: true
+          schema:
+            $ref: "#/definitions/Admin"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Admin
+      parameters:
+        - name: adminId
+          in: path
+          description: AdminID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /admin/search:
+    post:
+      summary: 根据条件查询Admin列表 
+      parameters:
+        - name: body
+          in: body
+          description: Admin实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Admin'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiAdminListResponse'
+  /admin/search/{page}/{size}:
+    post:
+      summary: Admin分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Admin"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiAdminPageResponse'
+definitions:
+  Admin:
+    type: "object"
+    properties:
+      id:
+        type: "string"        
+        description: "ID"
+      loginname:
+        type: "string"        
+        description: "登陆名称"
+      password:
+        type: "string"        
+        description: "密码"
+      state:
+        type: "string"        
+        description: "状态"
+
+  AdminList:
+    type: "array"
+    items: 
+      $ref: '#/definitions/Admin'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiAdminResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Admin'
+  ApiAdminListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/AdminList'
+  ApiAdminPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/AdminList'

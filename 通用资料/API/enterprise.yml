@@ -1,0 +1,208 @@
+swagger: "2.0"
+info:
+  description: Enterprise
+  version: "1.0.0"
+  title: API-Enterprise
+host: api.tensquare.com
+basePath: /recruit
+paths:
+  /enterprise:
+    post:
+      summary: 增加Enterprise
+      parameters:
+      - in: body
+        name: body
+        description: Enterprise实体
+        required: true
+        schema:
+          $ref: "#/definitions/Enterprise"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Enterprise全部列表
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiEnterpriseListResponse'
+  /enterprise/{enterpriseId}:
+    get:
+      summary: 根据ID查询enterprise
+      parameters:
+        - name: enterpriseId
+          in: path
+          description: EnterpriseID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiEnterpriseResponse'
+    put:
+      summary: 修改Enterprise
+      parameters:
+        - name: enterpriseId
+          in: path
+          description: EnterpriseID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Enterprise实体
+          required: true
+          schema:
+            $ref: "#/definitions/Enterprise"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Enterprise
+      parameters:
+        - name: enterpriseId
+          in: path
+          description: EnterpriseID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /enterprise/search:
+    post:
+      summary: 根据条件查询Enterprise列表
+      parameters:
+        - name: body
+          in: body
+          description: Enterprise实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Enterprise'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiEnterpriseListResponse'
+  /enterprise/search/{page}/{size}:
+    post:
+      summary: Enterprise分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Enterprise"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiEnterprisePageResponse'
+definitions:
+  Enterprise:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "ID"
+      name:
+        type: "string"
+        description: "企业名称"
+      summary:
+        type: "string"
+        description: "企业简介"
+      address:
+        type: "string"
+        description: "企业地址"
+      labels:
+        type: "string"
+        description: "标签列表"
+      coordinate:
+        type: "string"
+        description: "坐标"
+      ishot:
+        type: "string"
+        description: "是否热门"
+      logo:
+        type: "string"
+        description: "LOGO"
+      jobcount:
+        type: "string"
+        description: "职位数"
+      url:
+        type: "string"
+        description: "URL"
+
+  EnterpriseList:
+    type: "array"
+    items:
+      $ref: '#/definitions/Enterprise'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiEnterpriseResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Enterprise'
+  ApiEnterpriseListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/EnterpriseList'
+  ApiEnterprisePageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/EnterpriseList'

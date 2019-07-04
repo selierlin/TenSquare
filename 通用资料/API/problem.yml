@@ -1,0 +1,217 @@
+swagger: "2.0"
+info:
+  description: Problem
+  version: "1.0.0"
+  title: API-Problem
+host: api.tensquare.com
+basePath: /tensquare_qa
+paths:
+  /problem:
+    post:
+      summary: 增加Problem
+      parameters:
+      - in: body
+        name: body
+        description: Problem实体
+        required: true
+        schema:
+          $ref: "#/definitions/Problem"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Problem全部列表
+      responses:
+        200:
+          description: 成功
+          schema: 
+            $ref: '#/definitions/ApiProblemListResponse'
+  /problem/{problemId}:
+    get:
+      summary: 根据ID查询problem
+      parameters:
+        - name: problemId
+          in: path
+          description: ProblemID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiProblemResponse'
+    put:
+      summary: 修改Problem
+      parameters:
+        - name: problemId
+          in: path
+          description: ProblemID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Problem实体
+          required: true
+          schema:
+            $ref: "#/definitions/Problem"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Problem
+      parameters:
+        - name: problemId
+          in: path
+          description: ProblemID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /problem/search:
+    post:
+      summary: 根据条件查询Problem列表 
+      parameters:
+        - name: body
+          in: body
+          description: Problem实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Problem'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiProblemListResponse'
+  /problem/search/{page}/{size}:
+    post:
+      summary: Problem分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Problem"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiProblemPageResponse'
+definitions:
+  Problem:
+    type: "object"
+    properties:
+      id:
+        type: "string"        
+        description: "ID"
+      title:
+        type: "string"        
+        description: "标题"
+      content:
+        type: "string"        
+        description: "内容"
+      createtime:
+        type: "string"        
+        description: "创建日期"
+      updatetime:
+        type: "string"        
+        description: "修改日期"
+      userid:
+        type: "string"        
+        description: "用户ID"
+      nickname:
+        type: "string"        
+        description: "昵称"
+      visits:
+        type: "string"        
+        description: "浏览量"
+      thumbup:
+        type: "string"        
+        description: "点赞数"
+      reply:
+        type: "string"        
+        description: "回复数"
+      solve:
+        type: "string"        
+        description: "是否解决"
+      replyname:
+        type: "string"        
+        description: "回复人昵称"
+      replytime:
+        type: "string"        
+        description: "回复日期"
+
+  ProblemList:
+    type: "array"
+    items: 
+      $ref: '#/definitions/Problem'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiProblemResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Problem'
+  ApiProblemListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/ProblemList'
+  ApiProblemPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/ProblemList'

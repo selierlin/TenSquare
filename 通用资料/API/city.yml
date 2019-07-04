@@ -1,0 +1,187 @@
+swagger: "2.0"
+info:
+  description: City
+  version: "1.0.0"
+  title: API-City
+host: api.tensquare.com
+basePath: /base
+paths:
+  /city:
+    post:
+      summary: 增加City
+      parameters:
+      - in: body
+        name: body
+        description: City实体
+        required: true
+        schema:
+          $ref: "#/definitions/City"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: City全部列表
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiCityListResponse'
+  /city/{cityId}:
+    get:
+      summary: 根据ID查询city
+      parameters:
+        - name: cityId
+          in: path
+          description: CityID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiCityResponse'
+    put:
+      summary: 修改City
+      parameters:
+        - name: cityId
+          in: path
+          description: CityID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: City实体
+          required: true
+          schema:
+            $ref: "#/definitions/City"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除City
+      parameters:
+        - name: cityId
+          in: path
+          description: CityID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /city/search:
+    post:
+      summary: 根据条件查询City列表
+      parameters:
+        - name: body
+          in: body
+          description: City实体类
+          required: true
+          schema:
+            $ref: '#/definitions/City'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiCityListResponse'
+  /city/search/{page}/{size}:
+    post:
+      summary: City分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/City"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiCityPageResponse'
+definitions:
+  City:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "ID"
+      name:
+        type: "string"
+        description: "城市名称"
+      ishot:
+        type: "string"
+        description: "是否热门"
+
+  CityList:
+    type: "array"
+    items:
+      $ref: '#/definitions/City'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiCityResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/City'
+  ApiCityListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/CityList'
+  ApiCityPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/CityList'

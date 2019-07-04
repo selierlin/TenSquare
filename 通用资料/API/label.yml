@@ -1,0 +1,196 @@
+swagger: "2.0"
+info:
+  description: Label
+  version: "1.0.0"
+  title: API-Label
+host: api.tensquare.com
+basePath: /tensquare_base
+paths:
+  /label:
+    post:
+      summary: 增加Label
+      parameters:
+      - in: body
+        name: body
+        description: Label实体
+        required: true
+        schema:
+          $ref: "#/definitions/Label"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Label全部列表
+      responses:
+        200:
+          description: 成功
+          schema: 
+            $ref: '#/definitions/ApiLabelListResponse'
+  /label/{labelId}:
+    get:
+      summary: 根据ID查询label
+      parameters:
+        - name: labelId
+          in: path
+          description: LabelID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiLabelResponse'
+    put:
+      summary: 修改Label
+      parameters:
+        - name: labelId
+          in: path
+          description: LabelID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Label实体
+          required: true
+          schema:
+            $ref: "#/definitions/Label"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Label
+      parameters:
+        - name: labelId
+          in: path
+          description: LabelID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /label/search:
+    post:
+      summary: 根据条件查询Label列表 
+      parameters:
+        - name: body
+          in: body
+          description: Label实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Label'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiLabelListResponse'
+  /label/search/{page}/{size}:
+    post:
+      summary: Label分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Label"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiLabelPageResponse'
+definitions:
+  Label:
+    type: "object"
+    properties:
+      id:
+        type: "string"        
+        description: "标签ID"
+      labelname:
+        type: "string"        
+        description: "标签名称"
+      state:
+        type: "string"        
+        description: "状态"
+      count:
+        type: "string"        
+        description: "使用数量"
+      recommend:
+        type: "string"        
+        description: "是否推荐"
+      fans:
+        type: "string"        
+        description: "粉丝数"
+
+  LabelList:
+    type: "array"
+    items: 
+      $ref: '#/definitions/Label'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiLabelResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Label'
+  ApiLabelListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/LabelList'
+  ApiLabelPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/LabelList'

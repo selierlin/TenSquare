@@ -1,0 +1,6 @@
+删除所有<none>版本的镜像
+docker images|grep none|awk '{print $3}'|xargs docker rmi
+删除所有镜像
+service docker stop
+rm -rf /var/lib/docker
+service docker start

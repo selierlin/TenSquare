@@ -1,0 +1,199 @@
+swagger: "2.0"
+info:
+  description: Column
+  version: "1.0.0"
+  title: API-Column
+host: api.tensquare.com
+basePath: /article
+paths:
+  /column:
+    post:
+      summary: 增加Column
+      parameters:
+      - in: body
+        name: body
+        description: Column实体
+        required: true
+        schema:
+          $ref: "#/definitions/Column"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Column全部列表
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiColumnListResponse'
+  /column/{columnId}:
+    get:
+      summary: 根据ID查询column
+      parameters:
+        - name: columnId
+          in: path
+          description: ColumnID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiColumnResponse'
+    put:
+      summary: 修改Column
+      parameters:
+        - name: columnId
+          in: path
+          description: ColumnID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Column实体
+          required: true
+          schema:
+            $ref: "#/definitions/Column"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Column
+      parameters:
+        - name: columnId
+          in: path
+          description: ColumnID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /column/search:
+    post:
+      summary: 根据条件查询Column列表
+      parameters:
+        - name: body
+          in: body
+          description: Column实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Column'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiColumnListResponse'
+  /column/search/{page}/{size}:
+    post:
+      summary: Column分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Column"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiColumnPageResponse'
+definitions:
+  Column:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "ID"
+      name:
+        type: "string"
+        description: "专栏名称"
+      summary:
+        type: "string"
+        description: "专栏简介"
+      userid:
+        type: "string"
+        description: "用户ID"
+      createtime:
+        type: "string"
+        description: "申请日期"
+      checktime:
+        type: "string"
+        description: "审核日期"
+      state:
+        type: "string"
+        description: "状态"
+
+  ColumnList:
+    type: "array"
+    items:
+      $ref: '#/definitions/Column'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiColumnResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Column'
+  ApiColumnListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/ColumnList'
+  ApiColumnPageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/ColumnList'

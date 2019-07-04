@@ -1,0 +1,229 @@
+swagger: "2.0"
+info:
+  description: Article
+  version: "1.0.0"
+  title: API-Article
+host: api.tensquare.com
+basePath: /article
+paths:
+  /article:
+    post:
+      summary: 增加Article
+      parameters:
+      - in: body
+        name: body
+        description: Article实体
+        required: true
+        schema:
+          $ref: "#/definitions/Article"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    get:
+      summary: Article全部列表
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiArticleListResponse'
+  /article/{articleId}:
+    get:
+      summary: 根据ID查询article
+      parameters:
+        - name: articleId
+          in: path
+          description: ArticleID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiArticleResponse'
+    put:
+      summary: 修改Article
+      parameters:
+        - name: articleId
+          in: path
+          description: ArticleID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Article实体
+          required: true
+          schema:
+            $ref: "#/definitions/Article"
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+    delete:
+      summary: 根据ID删除Article
+      parameters:
+        - name: articleId
+          in: path
+          description: ArticleID
+          required: true
+          type: string
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /article/search:
+    post:
+      summary: 根据条件查询Article列表
+      parameters:
+        - name: body
+          in: body
+          description: Article实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Article'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiArticleListResponse'
+  /article/search/{page}/{size}:
+    post:
+      summary: Article分页
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: 页大小
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: 查询条件
+          required: true
+          schema:
+            $ref: "#/definitions/Article"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiArticlePageResponse'
+definitions:
+  Article:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "ID"
+      columnid:
+        type: "string"
+        description: "专栏ID"
+      userid:
+        type: "string"
+        description: "用户ID"
+      title:
+        type: "string"
+        description: "标题"
+      content:
+        type: "string"
+        description: "文章正文"
+      image:
+        type: "string"
+        description: "文章封面"
+      createtime:
+        type: "string"
+        description: "发表日期"
+      updatetime:
+        type: "string"
+        description: "修改日期"
+      ispublic:
+        type: "string"
+        description: "是否公开"
+      istop:
+        type: "string"
+        description: "是否置顶"
+      visits:
+        type: "string"
+        description: "浏览量"
+      thumbup:
+        type: "string"
+        description: "点赞数"
+      comment:
+        type: "string"
+        description: "评论数"
+      state:
+        type: "string"
+        description: "审核状态"
+      channelid:
+        type: "string"
+        description: "所属频道"
+      url:
+        type: "string"
+        description: "URL"
+      type:
+        type: "string"
+        description: "类型"
+
+  ArticleList:
+    type: "array"
+    items:
+      $ref: '#/definitions/Article'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+  ApiArticleResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/Article'
+  ApiArticleListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: '#/definitions/ArticleList'
+  ApiArticlePageResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        properties:
+          total:
+            type: "integer"
+            format: "int32"
+          rows:
+            $ref: '#/definitions/ArticleList'

@@ -1,0 +1,52 @@
+swagger: "2.0"
+info:
+  description: "交友"
+  version: "1.0.0"
+  title: "API列表-交友"
+host: "localhost:9010"
+basePath: "/"
+paths:
+  /friend/like/{friendid}/{type}:
+    put:
+      summary: "添加好友或非好友"
+      parameters:
+        - name: friendid
+          in: path
+          description: 好友ID
+          required: true
+          type: string
+        - name: type
+          in: path
+          description: "类型  1:喜欢 2：不喜欢"
+          required: true
+          type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /friend/{friendid}:
+    delete:
+      summary: 删除好友 
+      parameters:
+        - name: friendid
+          in: path
+          description: 好友ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 操作成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"

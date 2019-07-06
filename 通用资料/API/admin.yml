@@ -1,113 +1,106 @@
 swagger: "2.0"
 info:
-  description: Admin
+  description: "管理员"
   version: "1.0.0"
-  title: API-Admin
-host: api.tensquare.com
-basePath: /tensquare_user
+  title: "API列表-管理员"
+host: "localhost:9008"
+basePath: "/"
 paths:
-  /admin:
+  '/admin':
     post:
-      summary: 增加Admin
+      summary: "增加管理员"
       parameters:
-      - in: body
-        name: body
-        description: Admin实体
+      - in: "body"
+        name: "body"
+        description: ""
         required: true
         schema:
           $ref: "#/definitions/Admin"
       responses:
         200:
-          description: 成功
+          description: successful operation
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Admin全部列表
+      summary: "管理员全部列表"
       responses:
         200:
-          description: 成功
+          description: "成功查询到数据"
           schema: 
             $ref: '#/definitions/ApiAdminListResponse'
-  /admin/{adminId}:
+  '/admin/{adminId}':
     get:
-      summary: 根据ID查询admin
+      summary: 根据ID查询
+      description: 返回一个管理员
       parameters:
         - name: adminId
           in: path
           description: AdminID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiAdminResponse'
     put:
-      summary: 修改Admin
+      summary: "修改管理员"
       parameters:
         - name: adminId
           in: path
           description: AdminID
           required: true
-          type: string
-        - name: body
-          in: body
-          description: Admin实体
+          type: integer
+          format: int64
+        - name: "body"
+          in: "body"
+          description: ""
           required: true
           schema:
             $ref: "#/definitions/Admin"
       responses:
         200:
-          description: 成功
+          description: "修改成功"
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Admin
+      summary: 根据ID删除
+      description: 返回是否成功
+      operationId: deleteAdminById
+      produces:
+        - application/json
       parameters:
         - name: adminId
           in: path
           description: AdminID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiResponse'
-  /admin/search:
+  '/admin/search/{page}/{size}':
     post:
-      summary: 根据条件查询Admin列表 
-      parameters:
-        - name: body
-          in: body
-          description: Admin实体类
-          required: true
-          schema:
-            $ref: '#/definitions/Admin'
-      responses:
-        200:
-          description: 成功
-          schema:
-            $ref: '#/definitions/ApiAdminListResponse'
-  /admin/search/{page}/{size}:
-    post:
-      summary: Admin分页
+      summary: "管理员分页"
       parameters:
         - name: page
           in: path
           description: 页码
           required: true
           type: integer
-          format: int32
+          format: int64
         - name: size
           in: path
-          description: 页大小
+          description: "页大小"
           required: true
           type: integer
-          format: int32
-        - name: body
-          in: body
-          description: 查询条件
+          format: int64
+        - name: "body"
+          in: "body"
+          description: "查询条件"
           required: true
           schema:
             $ref: "#/definitions/Admin"
@@ -116,6 +109,20 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiAdminPageResponse'
+  /admin/login:
+    post:
+      summary: 登陆
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApiResponse'   
 definitions:
   Admin:
     type: "object"
@@ -132,7 +139,6 @@ definitions:
       state:
         type: "string"        
         description: "状态"
-
   AdminList:
     type: "array"
     items: 
@@ -176,7 +182,7 @@ definitions:
     properties:
       code:
         type: "integer"
-        format: "int32"
+        format: "int64"
       flag:
         type: "boolean"
       message:
@@ -188,3 +194,12 @@ definitions:
             format: "int32"
           rows:
             $ref: '#/definitions/AdminList'
+  Login:
+    type: "object"
+    properties:
+      loginname:
+        type: "string"        
+        description: "登陆名"
+      password:
+        type: "string"        
+        description: "密码"

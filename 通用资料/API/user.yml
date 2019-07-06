@@ -1,113 +1,165 @@
 swagger: "2.0"
 info:
-  description: User
+  description: "用户"
   version: "1.0.0"
-  title: API-User
-host: api.tensquare.com
-basePath: /tensquare_user
+  title: "API列表-用户"
+host: "localhost:9008"
+basePath: "/"
+schemes:
+- "http"
 paths:
   /user:
     post:
-      summary: 增加User
+      summary: "增加用户"
       parameters:
-      - in: body
-        name: body
-        description: User实体
+      - in: "body"
+        name: "body"
+        description: ""
         required: true
         schema:
           $ref: "#/definitions/User"
       responses:
         200:
-          description: 成功
+          description: successful operation
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: User全部列表
+      summary: "用户全部列表"
+      description: "返回用户全部列表"
       responses:
         200:
-          description: 成功
+          description: "成功查询到数据"
           schema: 
             $ref: '#/definitions/ApiUserListResponse'
+  /user/login:
+    post:
+      summary: 登陆
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApiResponse'        
+  /user/register/{code}:
+    post:
+      summary: "注册用户"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      - name: code
+        in: path
+        description: 短信验证码
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApiResponse'
   /user/{userId}:
     get:
-      summary: 根据ID查询user
+      summary: 根据ID查询
+      description: 返回一个用户
       parameters:
         - name: userId
           in: path
           description: UserID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
         200:
-          description: 成功
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiUserResponse'
     put:
-      summary: 修改User
+      summary: "修改用户"
       parameters:
         - name: userId
           in: path
           description: UserID
           required: true
-          type: string
-        - name: body
-          in: body
-          description: User实体
+          type: integer
+          format: int64
+        - name: "body"
+          in: "body"
+          description: ""
           required: true
           schema:
             $ref: "#/definitions/User"
       responses:
         200:
-          description: 成功
+          description: "修改成功"
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除User
+      summary: 根据ID删除
+      description: 返回是否成功
       parameters:
         - name: userId
           in: path
           description: UserID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiResponse'
-  /user/search:
-    post:
-      summary: 根据条件查询User列表 
-      parameters:
-        - name: body
-          in: body
-          description: User实体类
-          required: true
-          schema:
-            $ref: '#/definitions/User'
+  /user/info:
+    get:
+      summary: 查询登陆用户信息
+      description: 返回一个用户
       responses:
         200:
-          description: 成功
+          description: 操作成功
           schema:
-            $ref: '#/definitions/ApiUserListResponse'
+            $ref: '#/definitions/ApiUserResponse'
+  /user/saveinfo:
+    put:
+      summary: 修改当前登陆用户信息
+      parameters:
+        - name: "body"
+          in: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: 操作成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
   /user/search/{page}/{size}:
     post:
-      summary: User分页
+      summary: "用户分页"
+      description: "显示用户分页数据"
       parameters:
         - name: page
           in: path
           description: 页码
           required: true
           type: integer
-          format: int32
+          format: int64
         - name: size
           in: path
-          description: 页大小
+          description: "页大小"
           required: true
           type: integer
-          format: int32
-        - name: body
-          in: body
-          description: 查询条件
+          format: int64
+        - name: "body"
+          in: "body"
+          description: "查询条件"
           required: true
           schema:
             $ref: "#/definitions/User"
@@ -116,6 +168,75 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiUserPageResponse'
+  /user/sendsms/{mobile}:
+    post:
+      summary: "发送手机验证码"
+      description: "发送手机验证码"
+      parameters:
+        - name: mobile
+          in: path
+          description: 手机号
+          required: true
+          type: string
+      responses:
+        200:
+          description: 发送成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /user/follow/{userId}:
+    put:
+      summary: "关注某用户"
+      description: "关注某用户"
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse'  
+    delete:
+      summary: 删除某用户关注
+      description: 删除某用户关注
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse'    
+  /user/follow/myfans:
+    get: 
+      summary: "查询我的粉丝"
+      description: "查询我的粉丝"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiUserListResponse'  
+  /user/follow/myfollow:
+    get: 
+      summary: "查询我的关注"
+      description: "查询我的关注"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiUserListResponse'     
+  /user/follow/myfollowid:
+    get: 
+      summary: "查询我的关注ID列表"
+      description: "查询我的关注ID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiUserIdListResponse'
 definitions:
   User:
     type: "object"
@@ -123,9 +244,6 @@ definitions:
       id:
         type: "string"        
         description: "ID"
-      loginname:
-        type: "string"        
-        description: "登录名"
       mobile:
         type: "string"        
         description: "手机号码"
@@ -140,6 +258,7 @@ definitions:
         description: "性别"
       birthday:
         type: "string"        
+        format: 'date-time'
         description: "出生年月日"
       avatar:
         type: "string"        
@@ -149,32 +268,43 @@ definitions:
         description: "E-Mail"
       regdate:
         type: "string"        
+        format: 'date'
         description: "注册日期"
       updatedate:
         type: "string"        
         description: "修改日期"
+        format: 'date'
       lastdate:
         type: "string"        
         description: "最后登陆日期"
+        format: 'date'
       online:
-        type: "string"        
+        type: "integer"     
+        format: 'int64'
         description: "在线时长（分钟）"
       interest:
         type: "string"        
         description: "兴趣"
-      image:
-        type: "string"        
-        description: "头像"
       personality:
         type: "string"        
         description: "个性"
       fanscount:
-        type: "string"        
+        type: "integer"        
         description: "粉丝数"
+        format: 'int64'
       followcount:
-        type: "string"        
+        type: "integer"        
         description: "关注数"
-
+        format: 'int64'
+  Login:
+    type: "object"
+    properties:
+      mobile:
+        type: "string"        
+        description: "手机号"
+      password:
+        type: "string"        
+        description: "密码"
   UserList:
     type: "array"
     items: 
@@ -218,7 +348,7 @@ definitions:
     properties:
       code:
         type: "integer"
-        format: "int32"
+        format: "int64"
       flag:
         type: "boolean"
       message:
@@ -230,3 +360,19 @@ definitions:
             format: "int32"
           rows:
             $ref: '#/definitions/UserList'
+  UserIdList:
+    type: "array"
+    items: 
+      type: "string"
+  ApiUserIdListResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int64"
+      flag:
+        type: "boolean"
+      message:
+        type: "string"
+      data:
+        $ref: "#/definitions/UserIdList"

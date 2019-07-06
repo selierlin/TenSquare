@@ -56,6 +56,7 @@ export default {
       gatheringApi.search(this.pageNo, 12, { state: "1" }).then(res => {
         this.items = this.items.concat(res.data.data.rows);
       });
+      //TODO 已经解决。出现无法访问情况：原因
     }
   }
 };

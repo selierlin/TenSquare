@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Enterprise
+  description: 企业
   version: "1.0.0"
-  title: API-Enterprise
-host: api.tensquare.com
-basePath: /recruit
+  title: API-企业
+host: localhost:9002
+basePath: /
 paths:
   /enterprise:
     post:
-      summary: 增加Enterprise
+      summary: 增加企业
       parameters:
       - in: body
         name: body
-        description: Enterprise实体
+        description: 企业实体
         required: true
         schema:
           $ref: "#/definitions/Enterprise"
@@ -22,15 +22,15 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Enterprise全部列表
+      summary: 企业全部列表
       responses:
         200:
           description: 成功
-          schema:
+          schema: 
             $ref: '#/definitions/ApiEnterpriseListResponse'
   /enterprise/{enterpriseId}:
     get:
-      summary: 根据ID查询enterprise
+      summary: 根据ID查询企业
       parameters:
         - name: enterpriseId
           in: path
@@ -43,7 +43,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiEnterpriseResponse'
     put:
-      summary: 修改Enterprise
+      summary: 修改企业
       parameters:
         - name: enterpriseId
           in: path
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Enterprise
+      summary: 根据ID删除企业
       parameters:
         - name: enterpriseId
           in: path
@@ -76,7 +76,7 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /enterprise/search:
     post:
-      summary: 根据条件查询Enterprise列表
+      summary: 根据条件查询企业列表 
       parameters:
         - name: body
           in: body
@@ -84,6 +84,14 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Enterprise'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiEnterpriseListResponse'
+  /enterprise/search/hotlist:
+    get:
+      summary: 热门企业列表 
       responses:
         200:
           description: 成功
@@ -121,39 +129,39 @@ definitions:
     type: "object"
     properties:
       id:
-        type: "string"
+        type: "string"        
         description: "ID"
       name:
-        type: "string"
+        type: "string"        
         description: "企业名称"
       summary:
-        type: "string"
+        type: "string"        
         description: "企业简介"
       address:
-        type: "string"
+        type: "string"        
         description: "企业地址"
       labels:
-        type: "string"
+        type: "string"        
         description: "标签列表"
       coordinate:
-        type: "string"
+        type: "string"        
         description: "坐标"
       ishot:
-        type: "string"
+        type: "string"        
         description: "是否热门"
       logo:
-        type: "string"
+        type: "string"        
         description: "LOGO"
       jobcount:
-        type: "string"
+        type: "string"        
         description: "职位数"
       url:
-        type: "string"
+        type: "string"        
         description: "URL"
 
   EnterpriseList:
     type: "array"
-    items:
+    items: 
       $ref: '#/definitions/Enterprise'
   ApiResponse:
     type: "object"

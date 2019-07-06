@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Problem
+  description: 问题
   version: "1.0.0"
-  title: API-Problem
-host: api.tensquare.com
-basePath: /tensquare_qa
+  title: API-问题
+host: localhost:9003
+basePath: /qa
 paths:
   /problem:
     post:
-      summary: 增加Problem
+      summary: 增加问题
       parameters:
       - in: body
         name: body
-        description: Problem实体
+        description: 问题实体
         required: true
         schema:
           $ref: "#/definitions/Problem"
@@ -26,11 +26,11 @@ paths:
       responses:
         200:
           description: 成功
-          schema: 
+          schema:
             $ref: '#/definitions/ApiProblemListResponse'
   /problem/{problemId}:
     get:
-      summary: 根据ID查询problem
+      summary: 根据ID查询问题
       parameters:
         - name: problemId
           in: path
@@ -43,7 +43,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiProblemResponse'
     put:
-      summary: 修改Problem
+      summary: 修改问题
       parameters:
         - name: problemId
           in: path
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Problem
+      summary: 根据ID删除问题
       parameters:
         - name: problemId
           in: path
@@ -76,7 +76,7 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /problem/search:
     post:
-      summary: 根据条件查询Problem列表 
+      summary: 根据条件查询问题列表
       parameters:
         - name: body
           in: body
@@ -91,7 +91,7 @@ paths:
             $ref: '#/definitions/ApiProblemListResponse'
   /problem/search/{page}/{size}:
     post:
-      summary: Problem分页
+      summary: 问题分页
       parameters:
         - name: page
           in: path
@@ -116,53 +116,161 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiProblemPageResponse'
+  '/problem/newlist/{label}/{page}/{size}':
+    get:
+      summary: "最新问答列表"
+      parameters:
+        - name: label
+          in: path
+          description: 标签ID 如果此值为0则查询全部标签
+          required: true
+          type: integer
+          format: int64
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页码"
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiProblemPageResponse'
+  '/problem/hotlist/{label}/{page}/{size}':
+    get:
+      summary: "热门问答列表"
+      parameters:
+        - name: label
+          in: path
+          description: 标签ID 如果此值为0则查询全部标签
+          required: true
+          type: integer
+          format: int64
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页码"
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiProblemPageResponse'
+  '/problem/waitlist/{label}/{page}/{size}':
+    get:
+      summary: "等待回答列表"
+      parameters:
+        - name: label
+          in: path
+          description: 标签ID 如果此值为0则查询全部标签
+          required: true
+          type: integer
+          format: int64
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页码"
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiProblemPageResponse'
+  /problem/all/{label}/{page}/{size}:
+    post:
+      summary: Problem分页
+      parameters:
+        - name: label
+          in: path
+          description: 标签ID
+          required: true
+          type: integer
+          format: int64
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiProblemPageResponse'
 definitions:
   Problem:
     type: "object"
     properties:
       id:
-        type: "string"        
+        type: "string"
         description: "ID"
       title:
-        type: "string"        
+        type: "string"
         description: "标题"
       content:
-        type: "string"        
+        type: "string"
         description: "内容"
       createtime:
-        type: "string"        
+        type: "string"
         description: "创建日期"
       updatetime:
-        type: "string"        
+        type: "string"
         description: "修改日期"
       userid:
-        type: "string"        
+        type: "string"
         description: "用户ID"
       nickname:
-        type: "string"        
+        type: "string"
         description: "昵称"
       visits:
-        type: "string"        
+        type: "string"
         description: "浏览量"
       thumbup:
-        type: "string"        
+        type: "string"
         description: "点赞数"
       reply:
-        type: "string"        
+        type: "string"
         description: "回复数"
       solve:
-        type: "string"        
+        type: "string"
         description: "是否解决"
       replyname:
-        type: "string"        
+        type: "string"
         description: "回复人昵称"
       replytime:
-        type: "string"        
+        type: "string"
         description: "回复日期"
 
   ProblemList:
     type: "array"
-    items: 
+    items:
       $ref: '#/definitions/Problem'
   ApiResponse:
     type: "object"

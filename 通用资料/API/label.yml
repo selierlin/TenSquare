@@ -1,113 +1,126 @@
 swagger: "2.0"
 info:
-  description: Label
+  description: "标签"
   version: "1.0.0"
-  title: API-Label
-host: api.tensquare.com
-basePath: /tensquare_base
+  title: "API列表-标签"
+host: "localhost:9001"
+basePath: /base
 paths:
-  /label:
+  '/label':
     post:
-      summary: 增加Label
+      summary: "增加标签"
       parameters:
-      - in: body
-        name: body
-        description: Label实体
+      - in: "body"
+        name: "body"
+        description: ""
         required: true
         schema:
           $ref: "#/definitions/Label"
       responses:
         200:
-          description: 成功
+          description: successful operation
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Label全部列表
+      summary: "标签全部列表"
+      description: "返回Label全部列表"
+      operationId: "findLabelList"
+      produces:
+      - "application/json"
       responses:
         200:
-          description: 成功
-          schema: 
+          description: "成功查询到数据"
+          schema:
             $ref: '#/definitions/ApiLabelListResponse'
-  /label/{labelId}:
+  '/label/toplist':
     get:
-      summary: 根据ID查询label
+      summary: "推荐标签列表"
+      responses:
+        200:
+          description: "成功查询到数据"
+          schema:
+            $ref: '#/definitions/ApiLabelListResponse'
+  '/label/list':
+    get:
+      summary: "有效标签列表"
+      responses:
+        200:
+          description: "成功查询到数据"
+          schema:
+            $ref: '#/definitions/ApiLabelListResponse'
+  '/label/{labelId}':
+    get:
+      summary: 根据ID查询
+      description: 返回一个标签
+      operationId: getLabelById
+      produces:
+        - application/json
       parameters:
         - name: labelId
           in: path
           description: LabelID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiLabelResponse'
     put:
-      summary: 修改Label
+      summary: "修改标签"
       parameters:
         - name: labelId
           in: path
-          description: LabelID
+          description: 标签ID
           required: true
-          type: string
-        - name: body
-          in: body
-          description: Label实体
+          type: integer
+          format: int64
+        - name: "body"
+          in: "body"
+          description: ""
           required: true
           schema:
             $ref: "#/definitions/Label"
       responses:
         200:
-          description: 成功
+          description: "修改成功"
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Label
+      summary: 根据ID删除
+      description: 返回是否成功
       parameters:
         - name: labelId
           in: path
           description: LabelID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiResponse'
-  /label/search:
+  '/label/search/{page}/{size}':
     post:
-      summary: 根据条件查询Label列表 
-      parameters:
-        - name: body
-          in: body
-          description: Label实体类
-          required: true
-          schema:
-            $ref: '#/definitions/Label'
-      responses:
-        200:
-          description: 成功
-          schema:
-            $ref: '#/definitions/ApiLabelListResponse'
-  /label/search/{page}/{size}:
-    post:
-      summary: Label分页
+      summary: "标签分页"
       parameters:
         - name: page
           in: path
           description: 页码
           required: true
           type: integer
-          format: int32
+          format: int64
         - name: size
           in: path
-          description: 页大小
+          description: "页大小"
           required: true
           type: integer
-          format: int32
-        - name: body
-          in: body
-          description: 查询条件
+          format: int64
+        - name: "body"
+          in: "body"
+          description: "查询条件"
           required: true
           schema:
             $ref: "#/definitions/Label"
@@ -116,32 +129,43 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiLabelPageResponse'
+  '/label/search':
+    post:
+      summary: "标签分页"
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "查询条件"
+          required: true
+          schema:
+            $ref: "#/definitions/Label"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiLabelListResponse'
 definitions:
   Label:
     type: "object"
     properties:
       id:
-        type: "string"        
+        type: "string"
         description: "标签ID"
       labelname:
-        type: "string"        
+        type: "string"
         description: "标签名称"
       state:
-        type: "string"        
+        type: "string"
         description: "状态"
       count:
-        type: "string"        
-        description: "使用数量"
+        type: "integer"
+        format: "int32"
       recommend:
-        type: "string"        
+        type: "string"
         description: "是否推荐"
-      fans:
-        type: "string"        
-        description: "粉丝数"
-
   LabelList:
     type: "array"
-    items: 
+    items:
       $ref: '#/definitions/Label'
   ApiResponse:
     type: "object"
@@ -182,7 +206,7 @@ definitions:
     properties:
       code:
         type: "integer"
-        format: "int32"
+        format: "int64"
       flag:
         type: "boolean"
       message:

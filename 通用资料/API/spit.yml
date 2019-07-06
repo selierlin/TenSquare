@@ -1,72 +1,72 @@
 swagger: "2.0"
 info:
-  description: 活动
+  description: 吐槽
   version: "1.0.0"
-  title: API-活动
-host: localhost:9005
-basePath: /
+  title: API-吐槽
+host: localhost:9006
+basePath: /spit
 paths:
-  /gathering:
+  /spit:
     post:
-      summary: 增加活动
+      summary: 增加吐槽
       parameters:
       - in: body
         name: body
-        description: 活动实体
+        description: Spit实体
         required: true
         schema:
-          $ref: "#/definitions/Gathering"
+          $ref: "#/definitions/Spit"
       responses:
         200:
           description: 成功
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: 活动全部列表
+      summary: Spit全部列表
       responses:
         200:
           description: 成功
-          schema: 
-            $ref: '#/definitions/ApiGatheringListResponse'
-  /gathering/{gatheringId}:
+          schema:
+            $ref: '#/definitions/ApiSpitListResponse'
+  /spit/{spitId}:
     get:
-      summary: 根据ID查询活动
+      summary: 根据ID查询吐槽
       parameters:
-        - name: gatheringId
+        - name: spitId
           in: path
-          description: GatheringID
+          description: SpitID
           required: true
           type: string
       responses:
         200:
           description: 成功
           schema:
-            $ref: '#/definitions/ApiGatheringResponse'
+            $ref: '#/definitions/ApiSpitResponse'
     put:
-      summary: 修改活动
+      summary: 修改吐槽
       parameters:
-        - name: gatheringId
+        - name: spitId
           in: path
-          description: 活动ID
+          description: SpitID
           required: true
           type: string
         - name: body
           in: body
-          description: 活动实体
+          description: Spit实体
           required: true
           schema:
-            $ref: "#/definitions/Gathering"
+            $ref: "#/definitions/Spit"
       responses:
         200:
           description: 成功
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除活动
+      summary: 根据ID删除吐槽
       parameters:
-        - name: gatheringId
+        - name: spitId
           in: path
-          description: 活动ID
+          description: SpitID
           required: true
           type: string
       responses:
@@ -74,24 +74,38 @@ paths:
           description: 成功
           schema:
             $ref: '#/definitions/ApiResponse'
-  /gathering/search:
-    post:
-      summary: 根据条件查询活动列表 
+  /spit/thumbup/{spitId}:
+    put:
+      summary: 吐槽点赞
       parameters:
-        - name: body
-          in: body
-          description: 活动实体类
+        - name: spitId
+          in: path
+          description: SpitID
           required: true
-          schema:
-            $ref: '#/definitions/Gathering'
+          type: string
       responses:
         200:
           description: 成功
           schema:
-            $ref: '#/definitions/ApiGatheringListResponse'
-  /gathering/search/{page}/{size}:
+            $ref: '#/definitions/ApiResponse'
+  /spit/search:
     post:
-      summary: 活动分页
+      summary: 根据条件查询Spit列表
+      parameters:
+        - name: body
+          in: body
+          description: Spit实体类
+          required: true
+          schema:
+            $ref: '#/definitions/Spit'
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/ApiSpitListResponse'
+  /spit/search/{page}/{size}:
+    post:
+      summary: Spit分页
       parameters:
         - name: page
           in: path
@@ -110,16 +124,21 @@ paths:
           description: 查询条件
           required: true
           schema:
-            $ref: "#/definitions/Gathering"
+            $ref: "#/definitions/Spit"
       responses:
         200:
           description: 查询成功
           schema:
-            $ref: '#/definitions/ApiGatheringPageResponse'
-  /gathering/city/{city}/{page}/{size}:
+            $ref: '#/definitions/ApiSpitPageResponse'
+  /spit/comment/{parentid}/{page}/{size}:
     get:
-      summary: 根据城市显示分页内容
+      summary: 根据上级ID查询吐槽数据（分页）
       parameters:
+        - name: parentid
+          in: path
+          description: 上级吐槽ID
+          required: true
+          type: string
         - name: page
           in: path
           description: 页码
@@ -132,64 +151,58 @@ paths:
           required: true
           type: integer
           format: int32
-        - name: city
-          in: path
-          description: 城市
-          required: true
-          type: string
       responses:
         200:
           description: 查询成功
           schema:
-            $ref: '#/definitions/ApiGatheringPageResponse'
+            $ref: '#/definitions/ApiSpitPageResponse'
 definitions:
-  Gathering:
+  Spit:
     type: "object"
     properties:
-      id:
-        type: "string"        
-        description: "编号"
-      name:
-        type: "string"        
-        description: "活动名称"
-      summary:
-        type: "string"        
-        description: "大会简介"
-      detail:
-        type: "string"        
-        description: "详细说明"
-      sponsor:
-        type: "string"        
-        description: "主办方"
-      image:
-        type: "string"        
-        description: "活动图片"
-      starttime:
+      _id:
         type: "string"
-        description: "开始时间"
+        description: "ID"
+      content:
+        type: "string"
+        description: "吐槽内容"
+      publishtime:
+        type: "string"
+        description: "发布日期"
         format: "date"
-      endtime:
-        type: "string"        
-        description: "截止时间"
-        format: "date"
-      address:
-        type: "string"        
-        description: "举办地点"
-      enrolltime:
-        type: "string"        
-        description: "报名截止"
-        format: "date"
+      userid:
+        type: "string"
+        description: "发布人ID"
+      nickname:
+        type: "string"
+        description: "发布人昵称"
+      visits:
+        type: "integer"
+        format: "int32"
+        description: "浏览量"
+      thumbup:
+        type: "integer"
+        format: "int32"
+        description: "点赞数"
+      share:
+        type: "integer"
+        format: "int32"
+        description: "分享数"
+      comment:
+        type: "integer"
+        format: "int32"
+        description: "回复数"
       state:
-        type: "string"        
+        type: "string"
         description: "是否可见"
-      city:
-        type: "string"        
-        description: "城市"
+      parentid:
+        type: "string"
+        description: "上级ID"
 
-  GatheringList:
+  SpitList:
     type: "array"
-    items: 
-      $ref: '#/definitions/Gathering'
+    items:
+      $ref: '#/definitions/Spit'
   ApiResponse:
     type: "object"
     properties:
@@ -200,7 +213,7 @@ definitions:
         type: "boolean"
       message:
         type: "string"
-  ApiGatheringResponse:
+  ApiSpitResponse:
     type: "object"
     properties:
       code:
@@ -211,8 +224,8 @@ definitions:
       message:
         type: "string"
       data:
-        $ref: '#/definitions/Gathering'
-  ApiGatheringListResponse:
+        $ref: '#/definitions/Spit'
+  ApiSpitListResponse:
     type: "object"
     properties:
       code:
@@ -223,8 +236,8 @@ definitions:
       message:
         type: "string"
       data:
-        $ref: '#/definitions/GatheringList'
-  ApiGatheringPageResponse:
+        $ref: '#/definitions/SpitList'
+  ApiSpitPageResponse:
     type: "object"
     properties:
       code:
@@ -240,4 +253,4 @@ definitions:
             type: "integer"
             format: "int32"
           rows:
-            $ref: '#/definitions/GatheringList'
+            $ref: '#/definitions/SpitList'

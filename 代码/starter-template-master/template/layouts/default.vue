@@ -31,14 +31,22 @@
               <input type="text" placeholder="输入关键词..." />
               <span class="btn-search fa fa-search"></span>
             </form>
-            <div class="sui-nav pull-right info">
+            <div class="sui-nav pull-right info" v-if="user.name!=undefined">
               <li>
-                <a href="~/assets/other-notice.html" target="_blank" class="notice">小强</a>
+                <a href="/manager" class="notice">{{user.name}}</a>
               </li>
               <li>
-                <a href="~/assets/person-homepage.html" target="_blank" class="homego">
-                  <img src="~/assets/img/widget-photo.png" alt="用户头像" />
+                <a @click="logout" class="notice">退出登录</a>
+              </li>
+              <li>
+                <a href="/manager" class="homego">
+                  <img width="50px" height="50px" :src="user.avatar" alt="用户头像" />
                 </a>
+              </li>
+            </div>
+            <div class="sui-nav pull-right info" v-if="user.name===undefined">
+              <li>
+                <a href="login" class="notice">登录</a>
               </li>
             </div>
           </div>
@@ -96,5 +104,22 @@ import "~/assets/plugins/sui/sui-append.min.css";
 import "~/assets/plugins/font-awesome/css/font-awesome.min.css";
 import "~/assets/css/widget-base.css";
 import "~/assets/css/widget-head-foot.css";
-export default {};
+import { getUser, removeUser } from "@/utils/auth";
+import userApi from "@/api/user";
+export default {
+  data() {
+    return {
+      user: {}
+    };
+  },
+  created() {
+    this.user = getUser();
+  },
+  methods: {
+    logout() {
+      removeUser(); //清除登陆用户信息
+      location.href = "/";
+    }
+  }
+};
 </script>

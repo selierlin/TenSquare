@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Article
+  description: 文章
   version: "1.0.0"
-  title: API-Article
-host: api.tensquare.com
-basePath: /article
+  title: API-文章
+host: localhost:9004
+basePath: /
 paths:
   /article:
     post:
-      summary: 增加Article
+      summary: 增加文章
       parameters:
       - in: body
         name: body
-        description: Article实体
+        description: 文章实体
         required: true
         schema:
           $ref: "#/definitions/Article"
@@ -22,15 +22,15 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Article全部列表
+      summary: 文章全部列表
       responses:
         200:
           description: 成功
-          schema:
+          schema: 
             $ref: '#/definitions/ApiArticleListResponse'
   /article/{articleId}:
     get:
-      summary: 根据ID查询article
+      summary: 根据ID查询文章
       parameters:
         - name: articleId
           in: path
@@ -43,7 +43,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiArticleResponse'
     put:
-      summary: 修改Article
+      summary: 修改文章
       parameters:
         - name: articleId
           in: path
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Article
+      summary: 根据ID删除文章
       parameters:
         - name: articleId
           in: path
@@ -76,7 +76,7 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /article/search:
     post:
-      summary: 根据条件查询Article列表
+      summary: 根据条件查询文章列表 
       parameters:
         - name: body
           in: body
@@ -91,7 +91,7 @@ paths:
             $ref: '#/definitions/ApiArticleListResponse'
   /article/search/{page}/{size}:
     post:
-      summary: Article分页
+      summary: 文章分页
       parameters:
         - name: page
           in: path
@@ -116,65 +116,161 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiArticlePageResponse'
+  /article/thumbup/{articleId}:
+    put:
+      summary: "点赞"
+      parameters:
+      - name: "articleId"
+        in: "path"
+        description: ""
+        required: true
+        type: string
+      responses:
+        200:
+          description: 操作成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /article/channel/{channelId}/{page}/{size}:
+    post:
+      summary: "根据频道ID获取文章列表"
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页码"
+          required: true
+          type: integer
+          format: int64
+        - name: "channelId"
+          in: "path"
+          description: "频道ID"
+          required: true
+          type: "integer"
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiArticlePageResponse'
+  /article/column/{columnId}/{page}/{size}:
+    post:
+      summary: "根据专栏ID获取文章列表"
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页大小"
+          required: true
+          type: integer
+          format: int64
+        - name: "columnId"
+          in: "path"
+          description: "专栏ID"
+          required: true
+          type: "integer"
+          format: int64
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiArticlePageResponse'
+  /article/examine/{articleId}:
+    put: 
+      summary: "文章审核"
+      description: "文章审核"
+      parameters:
+        - name: articleId
+          in: path
+          description: 文章ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 操作成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /article/top:
+    get:
+      summary: "头条文章"
+      responses:
+        200:
+          description: "成功查询到数据"
+          schema: 
+            $ref: '#/definitions/ApiArticleListResponse'
 definitions:
   Article:
     type: "object"
     properties:
       id:
-        type: "string"
+        type: "string"        
         description: "ID"
       columnid:
-        type: "string"
+        type: "string"        
         description: "专栏ID"
       userid:
-        type: "string"
+        type: "string"        
         description: "用户ID"
       title:
-        type: "string"
+        type: "string"        
         description: "标题"
       content:
-        type: "string"
+        type: "string"        
         description: "文章正文"
       image:
-        type: "string"
+        type: "string"        
         description: "文章封面"
       createtime:
-        type: "string"
+        type: "string"    
+        format: 'date-time'           
         description: "发表日期"
       updatetime:
-        type: "string"
+        type: "string" 
+        format: 'date-time'           
         description: "修改日期"
       ispublic:
-        type: "string"
+        type: "string"        
         description: "是否公开"
       istop:
-        type: "string"
+        type: "string"        
         description: "是否置顶"
       visits:
-        type: "string"
+        type: "integer"
+        format: "int32"      
         description: "浏览量"
       thumbup:
-        type: "string"
+        type: "integer"
+        format: "int32"        
         description: "点赞数"
       comment:
-        type: "string"
+        type: "integer"
+        format: "int32"         
         description: "评论数"
       state:
-        type: "string"
+        type: "string"        
         description: "审核状态"
       channelid:
-        type: "string"
+        type: "string"        
         description: "所属频道"
       url:
-        type: "string"
+        type: "string"        
         description: "URL"
       type:
-        type: "string"
+        type: "string"        
         description: "类型"
-
   ArticleList:
     type: "array"
-    items:
+    items: 
       $ref: '#/definitions/Article'
   ApiResponse:
     type: "object"

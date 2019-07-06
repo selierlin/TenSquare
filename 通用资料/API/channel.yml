@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Channel
+  description: 频道
   version: "1.0.0"
-  title: API-Channel
-host: api.tensquare.com
-basePath: /article
+  title: API-频道
+host: http://localhost:9004
+basePath: /
 paths:
   /channel:
     post:
-      summary: 增加Channel
+      summary: 增加频道
       parameters:
       - in: body
         name: body
-        description: Channel实体
+        description: 频道实体
         required: true
         schema:
           $ref: "#/definitions/Channel"
@@ -22,15 +22,15 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Channel全部列表
+      summary: 频道全部列表
       responses:
         200:
           description: 成功
-          schema:
+          schema: 
             $ref: '#/definitions/ApiChannelListResponse'
   /channel/{channelId}:
     get:
-      summary: 根据ID查询channel
+      summary: 根据ID查询频道
       parameters:
         - name: channelId
           in: path
@@ -43,7 +43,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiChannelResponse'
     put:
-      summary: 修改Channel
+      summary: 修改频道
       parameters:
         - name: channelId
           in: path
@@ -52,7 +52,7 @@ paths:
           type: string
         - name: body
           in: body
-          description: Channel实体
+          description: 频道实体
           required: true
           schema:
             $ref: "#/definitions/Channel"
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Channel
+      summary: 根据ID删除频道
       parameters:
         - name: channelId
           in: path
@@ -76,7 +76,7 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /channel/search:
     post:
-      summary: 根据条件查询Channel列表
+      summary: 根据条件查询频道列表 
       parameters:
         - name: body
           in: body
@@ -91,7 +91,7 @@ paths:
             $ref: '#/definitions/ApiChannelListResponse'
   /channel/search/{page}/{size}:
     post:
-      summary: Channel分页
+      summary: 频道分页
       parameters:
         - name: page
           in: path
@@ -115,24 +115,24 @@ paths:
         200:
           description: 查询成功
           schema:
-            $ref: '#/definitions/ApiChannelPageResponse'
+            $ref: '#/definitions/ApiChannelPageResponse'   
 definitions:
   Channel:
     type: "object"
     properties:
       id:
-        type: "string"
+        type: "string"        
         description: "ID"
       name:
-        type: "string"
+        type: "string"        
         description: "频道名称"
       state:
-        type: "string"
+        type: "string"        
         description: "状态"
 
   ChannelList:
     type: "array"
-    items:
+    items: 
       $ref: '#/definitions/Channel'
   ApiResponse:
     type: "object"

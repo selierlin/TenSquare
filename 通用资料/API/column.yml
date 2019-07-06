@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Column
+  description: 专栏
   version: "1.0.0"
   title: API-Column
-host: api.tensquare.com
-basePath: /article
+host: http://localhost:9004
+basePath: /
 paths:
   /column:
     post:
-      summary: 增加Column
+      summary: 增加专栏
       parameters:
       - in: body
         name: body
-        description: Column实体
+        description: 专栏实体
         required: true
         schema:
           $ref: "#/definitions/Column"
@@ -22,15 +22,15 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Column全部列表
+      summary: 专栏全部列表
       responses:
         200:
           description: 成功
-          schema:
+          schema: 
             $ref: '#/definitions/ApiColumnListResponse'
   /column/{columnId}:
     get:
-      summary: 根据ID查询column
+      summary: 根据ID查询专栏
       parameters:
         - name: columnId
           in: path
@@ -47,12 +47,12 @@ paths:
       parameters:
         - name: columnId
           in: path
-          description: ColumnID
+          description: 专栏ID
           required: true
           type: string
         - name: body
           in: body
-          description: Column实体
+          description: 专栏实体
           required: true
           schema:
             $ref: "#/definitions/Column"
@@ -76,11 +76,11 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /column/search:
     post:
-      summary: 根据条件查询Column列表
+      summary: 根据条件查询专栏列表 
       parameters:
         - name: body
           in: body
-          description: Column实体类
+          description: 专栏实体类
           required: true
           schema:
             $ref: '#/definitions/Column'
@@ -91,7 +91,7 @@ paths:
             $ref: '#/definitions/ApiColumnListResponse'
   /column/search/{page}/{size}:
     post:
-      summary: Column分页
+      summary: 专栏分页
       parameters:
         - name: page
           in: path
@@ -116,35 +116,80 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiColumnPageResponse'
+  /column/apply:
+    post:
+      summary: "专栏申请"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/Column"
+      responses:
+        200:
+          description: 申请成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /column/examine/{columnId}:
+    put:
+      summary: "申请审核"
+      parameters:
+      - name: "columnId"
+        in: "path"
+        description: "专栏ID"
+        required: true
+        type: string
+      responses:
+        200:
+          description: 申请成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /column/user/{userId}:
+    get:
+      summary: "根据用户ID查询专栏列表"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "用户Id"
+        required: true
+        type: string
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiColumnListResponse'
 definitions:
   Column:
     type: "object"
     properties:
       id:
-        type: "string"
+        type: "string"        
         description: "ID"
       name:
-        type: "string"
+        type: "string"        
         description: "专栏名称"
       summary:
-        type: "string"
+        type: "string"        
         description: "专栏简介"
       userid:
-        type: "string"
+        type: "string"        
         description: "用户ID"
       createtime:
-        type: "string"
+        type: "string"   
+        format: 'date-time'               
         description: "申请日期"
       checktime:
-        type: "string"
+        type: "string"       
+        format: 'date-time'               
         description: "审核日期"
       state:
-        type: "string"
+        type: "string"        
         description: "状态"
 
   ColumnList:
     type: "array"
-    items:
+    items: 
       $ref: '#/definitions/Column'
   ApiResponse:
     type: "object"

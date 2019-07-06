@@ -1,0 +1,19 @@
+{
+  "name": "file-upload-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error:no test specified\" && exit 1"
+  },
+  "author": "theliang@qq. com",
+  "license": "ISC",
+  "dependencies": {
+    "ali-oss": "^6.1.1",
+    "body-parser": "^1.17.2",
+    "co": "^4.6.0",
+    "express": "^4.15.2",
+    "multer": "^1.3.0"
+  }
+}

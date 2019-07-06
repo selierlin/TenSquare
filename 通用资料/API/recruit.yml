@@ -1,18 +1,18 @@
 swagger: "2.0"
 info:
-  description: Recruit
+  description: 招聘
   version: "1.0.0"
-  title: API-Recruit
-host: api.tensquare.com
-basePath: /recruit
+  title: API-招聘
+host: localhost:9002
+basePath: /
 paths:
   /recruit:
     post:
-      summary: 增加Recruit
+      summary: 增加招聘
       parameters:
       - in: body
         name: body
-        description: Recruit实体
+        description: 招聘实体
         required: true
         schema:
           $ref: "#/definitions/Recruit"
@@ -22,15 +22,15 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Recruit全部列表
+      summary: 招聘全部列表
       responses:
         200:
           description: 成功
-          schema:
+          schema: 
             $ref: '#/definitions/ApiRecruitListResponse'
   /recruit/{recruitId}:
     get:
-      summary: 根据ID查询recruit
+      summary: 根据ID查询招聘
       parameters:
         - name: recruitId
           in: path
@@ -43,7 +43,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiRecruitResponse'
     put:
-      summary: 修改Recruit
+      summary: 修改招聘
       parameters:
         - name: recruitId
           in: path
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Recruit
+      summary: 根据ID删除招聘
       parameters:
         - name: recruitId
           in: path
@@ -76,7 +76,7 @@ paths:
             $ref: '#/definitions/ApiResponse'
   /recruit/search:
     post:
-      summary: 根据条件查询Recruit列表
+      summary: 根据条件查询招聘列表 
       parameters:
         - name: body
           in: body
@@ -91,7 +91,7 @@ paths:
             $ref: '#/definitions/ApiRecruitListResponse'
   /recruit/search/{page}/{size}:
     post:
-      summary: Recruit分页
+      summary: 招聘分页
       parameters:
         - name: page
           in: path
@@ -116,56 +116,73 @@ paths:
           description: 查询成功
           schema:
             $ref: '#/definitions/ApiRecruitPageResponse'
+  /recruit/search/recommend:
+    get:
+      summary: 推荐职位
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiRecruitListResponse'
+  /recruit/search/newlist:
+    get:
+      summary: 最新职位
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiRecruitListResponse'
 definitions:
   Recruit:
     type: "object"
     properties:
       id:
-        type: "string"
+        type: "string"        
         description: "ID"
       jobname:
-        type: "string"
+        type: "string"        
         description: "职位名称"
       salary:
-        type: "string"
+        type: "string"        
         description: "薪资范围"
       condition:
-        type: "string"
+        type: "string"        
         description: "经验要求"
       education:
-        type: "string"
+        type: "string"        
         description: "学历要求"
       type:
-        type: "string"
+        type: "string"        
         description: "任职方式"
       address:
-        type: "string"
+        type: "string"        
         description: "办公地址"
       eid:
-        type: "string"
+        type: "string"        
         description: "企业ID"
       createtime:
-        type: "string"
+        type: "string"       
+        format: 'date-time'        
         description: "创建日期"
       state:
-        type: "string"
+        type: "string"        
         description: "状态"
       url:
-        type: "string"
+        type: "string"        
         description: "网址"
       label:
-        type: "string"
+        type: "string"        
         description: "标签"
       content1:
-        type: "string"
+        type: "string"        
         description: "职位描述"
       content2:
-        type: "string"
+        type: "string"        
         description: "职位要求"
 
   RecruitList:
     type: "array"
-    items:
+    items: 
       $ref: '#/definitions/Recruit'
   ApiResponse:
     type: "object"

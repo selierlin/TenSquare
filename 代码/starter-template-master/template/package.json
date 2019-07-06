@@ -4,6 +4,11 @@
   "description": "十次方",
   "author": "theliang",
   "private": true,
+  "config": {
+    "nuxt": {
+      "port": 3000
+    }
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
@@ -14,14 +19,19 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "element-ui": "^2.10.1",
+    "js-cookie": "^2.2.0",
     "nuxt": "^2.0.0",
-    "vue-infinite-scroll": "^2.0.2"
+    "vue-infinite-scroll": "^2.0.2",
+    "vue-quill-editor": "^3.0.6",
+    "vue-quill-editor-upload": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.1",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^4.0.0",
+    "vue-infinite-scroll": "^2.0.2"
   }
 }

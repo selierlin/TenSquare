@@ -1,116 +1,160 @@
 swagger: "2.0"
 info:
-  description: Reply
+  description: "回答"
   version: "1.0.0"
-  title: API-Reply
-host: api.tensquare.com
-basePath: /tensquare_qa
+  title: "API列表-回答"
+host: localhost:9003
+basePath: "/"
+schemes:
+- "http"
 paths:
-  /reply:
+  '/reply':
     post:
-      summary: 增加Reply
+      summary: "增加回答"
       parameters:
-      - in: body
-        name: body
-        description: Reply实体
+      - in: "body"
+        name: "body"
+        description: ""
         required: true
         schema:
           $ref: "#/definitions/Reply"
       responses:
         200:
-          description: 成功
+          description: successful operation
           schema:
             $ref: '#/definitions/ApiResponse'
     get:
-      summary: Reply全部列表
+      summary: "回答全部列表"
       responses:
         200:
-          description: 成功
+          description: "成功查询到数据"
           schema: 
             $ref: '#/definitions/ApiReplyListResponse'
-  /reply/{replyId}:
+  '/reply/{replyId}':
     get:
-      summary: 根据ID查询reply
+      summary: 根据ID查询回答
       parameters:
         - name: replyId
           in: path
           description: ReplyID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiReplyResponse'
     put:
-      summary: 修改Reply
+      summary: "修改Reply"
       parameters:
         - name: replyId
           in: path
-          description: ReplyID
+          description: 回答ID
           required: true
-          type: string
-        - name: body
-          in: body
-          description: Reply实体
+          type: integer
+          format: int64
+        - name: "body"
+          in: "body"
+          description: ""
           required: true
           schema:
             $ref: "#/definitions/Reply"
       responses:
         200:
-          description: 成功
+          description: "修改成功"
           schema:
             $ref: '#/definitions/ApiResponse'
     delete:
-      summary: 根据ID删除Reply
+      summary: 根据ID删除
       parameters:
         - name: replyId
           in: path
           description: ReplyID
           required: true
-          type: string
+          type: integer
+          format: int64
       responses:
-        200:
-          description: 成功
+        '200':
+          description: 操作成功
           schema:
             $ref: '#/definitions/ApiResponse'
-  /reply/search:
+  '/reply/search/{page}/{size}':
     post:
-      summary: 根据条件查询Reply列表 
-      parameters:
-        - name: body
-          in: body
-          description: Reply实体类
-          required: true
-          schema:
-            $ref: '#/definitions/Reply'
-      responses:
-        200:
-          description: 成功
-          schema:
-            $ref: '#/definitions/ApiReplyListResponse'
-  /reply/search/{page}/{size}:
-    post:
-      summary: Reply分页
+      summary: "回答分页"
       parameters:
         - name: page
           in: path
           description: 页码
           required: true
           type: integer
-          format: int32
+          format: int64
         - name: size
           in: path
-          description: 页大小
+          description: "页大小"
           required: true
           type: integer
-          format: int32
-        - name: body
-          in: body
-          description: 查询条件
+          format: int64
+        - name: "body"
+          in: "body"
+          description: "查询条件"
           required: true
           schema:
             $ref: "#/definitions/Reply"
+      responses:
+        200:
+          description: 查询成功
+          schema:
+            $ref: '#/definitions/ApiReplyPageResponse'
+  /reply/problem/{problemId}:
+    get:
+      summary: "根据问题ID查询回答列表"
+      description: "根据问题ID查询回答列表"
+      produces:
+      - "application/json"
+      parameters: 
+        - name: problemId
+          in: path
+          description: "问题ID"
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: "成功查询到数据"
+          schema: 
+            $ref: '#/definitions/ApiReplyListResponse'
+  /reply/save:
+    post:
+      summary: "回答问题"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/Reply"
+      responses:
+        200:
+          description: 操作成功
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /reply/list/{page}/{size}:
+    get:
+      summary: "我的回答列表"
+      parameters:
+        - name: page
+          in: path
+          description: 页码
+          required: true
+          type: integer
+          format: int64
+        - name: size
+          in: path
+          description: "页码"
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: 查询成功
@@ -132,16 +176,17 @@ definitions:
       createtime:
         type: "string"        
         description: "创建日期"
+        format: date
       updatetime:
         type: "string"        
         description: "更新日期"
+        format: date
       userid:
         type: "string"        
         description: "回答人ID"
-      nickname:
+      nikename:
         type: "string"        
         description: "回答人昵称"
-
   ReplyList:
     type: "array"
     items: 
@@ -185,7 +230,7 @@ definitions:
     properties:
       code:
         type: "integer"
-        format: "int32"
+        format: "int64"
       flag:
         type: "boolean"
       message:

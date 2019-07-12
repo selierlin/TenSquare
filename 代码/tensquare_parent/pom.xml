@@ -15,6 +15,10 @@
         <module>tensquare_article</module>
         <module>tensquare_gathering</module>
         <module>tensquare_spit</module>
+        <module>tensquare_search</module>
+        <module>tensquare_rabbitmqtest</module>
+        <module>tensquare_user</module>
+        <module>tensquare_sms</module>
     </modules>
     <packaging>pom</packaging>
     <description>十次方项目-黑马程序员</description>

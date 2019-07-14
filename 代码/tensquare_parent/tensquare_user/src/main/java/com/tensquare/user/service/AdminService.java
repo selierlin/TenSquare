@@ -1,32 +1,26 @@
 package com.tensquare.user.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
-
+import com.tensquare.user.dao.AdminDao;
+import com.tensquare.user.pojo.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import util.IdWorker;
 
-import com.tensquare.user.dao.AdminDao;
-import com.tensquare.user.pojo.Admin;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 服务层
- * 
+ *
  * @author Administrator
  *
  */
@@ -35,9 +29,12 @@ public class AdminService {
 
 	@Autowired
 	private AdminDao adminDao;
-	
+
 	@Autowired
 	private IdWorker idWorker;
+
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	/**
 	 * 查询全部列表
@@ -47,7 +44,7 @@ public class AdminService {
 		return adminDao.findAll();
 	}
 
-	
+
 	/**
 	 * 条件查询+分页
 	 * @param whereMap
@@ -61,7 +58,7 @@ public class AdminService {
 		return adminDao.findAll(specification, pageRequest);
 	}
 
-	
+
 	/**
 	 * 条件查询
 	 * @param whereMap
@@ -87,6 +84,8 @@ public class AdminService {
 	 */
 	public void add(Admin admin) {
 		admin.setId( idWorker.nextId()+"" );
+		//密码加密
+		admin.setPassword(encoder.encode(admin.getPassword()));
 		adminDao.save(admin);
 	}
 
@@ -134,7 +133,7 @@ public class AdminService {
                 if (searchMap.get("state")!=null && !"".equals(searchMap.get("state"))) {
                 	predicateList.add(cb.like(root.get("state").as(String.class), "%"+(String)searchMap.get("state")+"%"));
                 }
-				
+
 				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
 
 			}
@@ -142,4 +141,15 @@ public class AdminService {
 
 	}
 
+    public Admin login(Admin admin) {
+	    //先根据用户名查询对象
+        Admin adminByDB = adminDao.findByLoginname(admin.getLoginname());
+        //将数据库中的密码与用户输入的密码进行比较
+        if (adminByDB != null && encoder.matches(admin.getPassword(),adminByDB.getPassword())) {
+            //登录成功
+            return adminByDB;
+        }
+        //登录失败
+        return null;
+    }
 }

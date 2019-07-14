@@ -19,6 +19,11 @@
         <module>tensquare_rabbitmqtest</module>
         <module>tensquare_user</module>
         <module>tensquare_sms</module>
+        <module>tensquare_eureka</module>
+        <module>tensquare_friend</module>
+        <module>tensquare_manager</module>
+        <module>tensquare_web</module>
+        <module>tensquare_config</module>
     </modules>
     <packaging>pom</packaging>
     <description>十次方项目-黑马程序员</description>
@@ -35,6 +40,17 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.M9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>

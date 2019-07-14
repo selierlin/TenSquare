@@ -1,0 +1,8 @@
+server:
+  port: 6868 # 服务端口
+eureka:
+  client:
+    register-with-eureka: false # 是否将自己注册到Eureka中，本身就是服务所以无需注册
+    fetch-registry: false # false表示自己就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+    service-url:
+      defaultZone: http://127.0.0.1:${server.port}/eureka/ # IDEA不会自动提示，需要自己写

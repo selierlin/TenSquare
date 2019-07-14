@@ -8,7 +8,10 @@ import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import util.JwtUtil;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +26,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     /**
@@ -97,6 +102,7 @@ public class UserController {
 
     /**
      * 删除
+     * 必须有admin角色才能删除
      *
      * @param id
      */
@@ -127,8 +133,35 @@ public class UserController {
      */
     @PostMapping("/register/{code}")
     public Result register(@PathVariable String code, @RequestBody User user) {
-        userService.add(user, code);
-        return new Result(true, StatusCode.OK, "注册成功");
+        List<User> userList = userService.checkUser(user);
+        if (userList == null || userList.isEmpty()) {
+            userService.add(user, code);
+            return new Result(true, StatusCode.OK, "注册成功");
+        } else {
+            return new Result(false, StatusCode.ERROR, "注册失败，手机号或用户名已经被使用");
+        }
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        User userLogin = userService.login(user);
+        if (userLogin == null) {
+            return new Result(false, StatusCode.LOGINERROR, "登录失败");
+        }
+        // 生成令牌
+        String token = jwtUtil.createJWT(userLogin.getId(), userLogin.getLoginname(), "user");
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("roles", "user");
+        return new Result(true, StatusCode.OK, "登录成功", map);
+    }
+
+    /**
+     * 更新好友粉丝和用户关注数
+     */
+    @PutMapping("/{userid}/{friendid}/{x}")
+    public void updateFansountAndFollowcount(@PathVariable String userid, @PathVariable String friendid, @PathVariable int x) {
+        userService.updateFanscountAndFollowcount(userid, friendid, x);
     }
 
 }

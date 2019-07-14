@@ -9,13 +9,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
+import util.JwtUtil;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +40,12 @@ public class UserService {
     private RedisTemplate redisTemplate;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * 查询全部列表
@@ -90,11 +100,13 @@ public class UserService {
      */
     public void add(User user) {
         user.setId(idWorker.nextId() + "");
+        user.setPassword(encoder.encode(user.getPassword()));
         userDao.save(user);
     }
 
     /**
      * 增加
+     *
      * @param user
      * @param code
      */
@@ -108,7 +120,8 @@ public class UserService {
             throw new RuntimeException("请输入正确的验证码");
         }
         user.setId(idWorker.nextId() + "");
-        user.setFollowcount(0);//关注数        
+        user.setPassword(encoder.encode(user.getPassword()));//密码加密
+        user.setFollowcount(0);//关注数
         user.setFanscount(0);//粉丝数        
         user.setOnline(0L);//在线时长        
         user.setRegdate(new Date());//注册日期
@@ -133,6 +146,11 @@ public class UserService {
      * @param id
      */
     public void deleteById(String id) {
+        String token = (String) request.getAttribute("claims_admin");
+        System.out.println("token = " + token);
+        if (token == null || "".equals(token)) {
+            throw new RuntimeException("权限不足");
+        }
         userDao.deleteById(id);
     }
 
@@ -203,6 +221,7 @@ public class UserService {
 
     /**
      * 发送验证码
+     *
      * @param mobile 手机号
      */
     public void sendSms(String mobile) {
@@ -214,8 +233,45 @@ public class UserService {
         HashMap<String, String> map = new HashMap<>();
         map.put("mobile", mobile);
         map.put("checkcode", checkCode);
-        rabbitTemplate.convertAndSend("sms", map);
+        //TODO 测试其它模块，暂时关闭
+        //rabbitTemplate.convertAndSend("sms", map);
         //在控制台输出[方便测试]
         System.out.println("验证码为：" + checkCode);
+    }
+
+    public User login(User user) {
+        //先根据用户名查询对象
+        List<User> userList = userDao.findByLoginnameOrMobile(user.getLoginname(), user.getMobile());
+        //将数据库中的密码与用户输入的密码进行比较
+        if (userList != null && userList.size() == 1 && encoder.matches(user.getPassword(), userList.get(0).getPassword())) {
+            //登录成功
+            return userList.get(0);
+        }
+        //登录失败
+        return null;
+    }
+
+    /**
+     * 检查用户的手机号或用户名是否被注册
+     *
+     * @param user
+     * @return
+     */
+    public List<User> checkUser(User user) {
+        return userDao.findByLoginnameOrMobile(user.getLoginname(), user.getMobile());
+    }
+
+    /**
+     * 更新好友粉丝和用户关注数
+     *
+     * @param userid
+     * @param friendid
+     * @param x
+     */
+    @Transactional
+    public void updateFanscountAndFollowcount(String userid, String friendid, int x) {
+        userDao.updateFanscount(x, friendid);
+        userDao.updateFollowcount(x, userid);
+
     }
 }

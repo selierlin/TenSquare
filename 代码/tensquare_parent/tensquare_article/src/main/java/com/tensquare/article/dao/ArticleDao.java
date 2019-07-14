@@ -25,7 +25,7 @@ public interface ArticleDao extends JpaRepository<Article, String>, JpaSpecifica
 
     /**
      * 文章点赞
-     *
+     * 坑：当时从pdf中将sql复制出来导致无法执行成功，但是控制台不提示错误，所以最好自己写
      * @param id
      */
     @Modifying

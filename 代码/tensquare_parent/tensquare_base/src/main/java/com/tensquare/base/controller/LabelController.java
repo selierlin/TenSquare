@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -17,6 +18,8 @@ import java.util.List;
 public class LabelController {
     @Autowired
     private LabelService labelService;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * 查询全部列表
@@ -25,6 +28,8 @@ public class LabelController {
      */
     @GetMapping
     public Result findAll() {
+        String token = request.getHeader("Authorization");
+        System.out.println("token = " + token);
         return new Result(true, StatusCode.OK, "查询成功", labelService.findAll());
     }
 
@@ -36,6 +41,7 @@ public class LabelController {
      */
     @GetMapping("/{labelId}")
     public Result findById(@PathVariable String labelId) {
+        System.out.println("9001被使用");
         return new Result(true, StatusCode.OK, "查询成功", labelService.findById(labelId));
     }
 

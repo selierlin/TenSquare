@@ -8,6 +8,7 @@ spring:
       server:
         git:
           uri: https://gitee.com/selierlin/tensqure_dev.git
+          search-paths: sub/son/  # 当配置文件存放在子目录下时，可通过模式匹配来检索子目录sub下的配置文件
   rabbitmq:
     host: 192.168.222.140
 management: # 暴露触发消息总线的地址

@@ -1,13 +1,13 @@
-#ÒÀÀµ¾µÏñÃû³ÆºÍID
+#ä¾èµ–é•œåƒåç§°å’ŒID
 FROM centos:7
-#Ö¸¶¨¾µÏñ´´½¨ÕßĞÅÏ¢
+#æŒ‡å®šé•œåƒåˆ›å»ºè€…ä¿¡æ¯
 MAINTAINER ITCAST
-#ÇĞ»»¹¤×÷Ä¿Â¼
+#åˆ‡æ¢å·¥ä½œç›®å½•
 WORKDIR /usr
 RUN mkdir /usr/local/java
-#ADD ÊÇÏà¶ÔÂ·¾¶jar,°ÑjavaÌí¼Óµ½ÈİÆ÷ÖĞ
+#ADD æ˜¯ç›¸å¯¹è·¯å¾„jar,æŠŠjavaæ·»åŠ åˆ°å®¹å™¨ä¸­
 ADD jdk-8u171-linux-x64.tar.gz /usr/local/java/
-#ÅäÖÃjava»·¾³±äÁ¿
+#é…ç½®javaç¯å¢ƒå˜é‡
 ENV JAVA_HOME /usr/local/java/jdk1.8.0_171
 ENV JRE_HOME $JAVA_HOME/jre
 ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH

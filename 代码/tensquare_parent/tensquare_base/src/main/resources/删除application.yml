@@ -13,8 +13,8 @@ spring:
     database: mysql
     show-sql: true
 eureka:
-  client:
+  client: #客户端注册进eureka服务列表内
     service-url:
       defaultZone: http://127.0.0.1:6868/eureka/
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: true #访问路径可以显示IP地址

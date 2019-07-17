@@ -11,4 +11,5 @@ SpringCloud、SpringData 、人工智能、爬虫、RabbitMQ等技术。
 ## 技术架构
 
 后端架构：SpringBoot+SpringCloud+SpringData+StringMVC（Spring全家桶）
+
 前端架构：Node.js+Vue.js+ElementUI+NUXT
